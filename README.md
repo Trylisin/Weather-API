@@ -1,26 +1,36 @@
 # Weather Cache API + UI
 
-A production-ready Flask API with Redis caching and a Vue UI. The API proxies Visual Crossing and caches responses for 12 hours by default.
+A weather service:
+- Flask API that fetches Visual Crossing data
+- Redis caching to keep responses fast
+- Vue UI for quick lookups
+- Docker Compose to run everything with one command
 
-## Quick start
+## Quick Start
 
-1. Create `.env` from `.env.example` and add your API key.
-2. Run:
+1. Copy `.env.example` to `.env` and add your Visual Crossing key.
+2. Build and run the stack:
 
 ```bash
 docker compose up --build
 ```
 
+Open:
 - UI: http://localhost:8080
 - API: http://localhost:8000
 
-## Endpoints
+## What You Get
 
-- `GET /health`
-- `GET /weather?city=Berlin`
+- `GET /health` for a simple health check
+- `GET /weather?city=Berlin` for live + cached weather
 
-## Notes
+## How Caching Works
 
-- Cache key uses the user-provided city code in lowercase.
-- Redis TTL defaults to 12 hours (`43200` seconds).
-- Rate limit defaults to 60 requests per minute per IP.
+- Cache key: `weather:{city}` (lowercased)
+- Default TTL: 12 hours (`43200` seconds)
+- Rate limit: 60 requests per minute per IP
+
+## Tips
+
+- Try a few cities in the UI to see cache vs live responses.
+- If Redis is unavailable, the API will still return live data.
