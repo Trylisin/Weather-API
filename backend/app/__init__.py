@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_limiter.errors import RateLimitExceeded
 from dotenv import load_dotenv
 
 from .cache import get_redis
@@ -22,5 +23,9 @@ def create_app():
     @app.errorhandler(404)
     def not_found(_):
         return jsonify({"error": "Not found"}), 404
+
+    @app.errorhandler(RateLimitExceeded)
+    def rate_limited(_):
+        return jsonify({"error": "Rate limit exceeded. Try again later."}), 429
 
     return app
